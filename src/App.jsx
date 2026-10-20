@@ -168,13 +168,15 @@ function HomePage() {
 
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch =
-      `${job.role} ${job.company} ${job.tags.join(" ")}`
-        .toLowerCase()
-        .includes(search.toLowerCase());
+    `${job.role} ${job.company} ${job.location} ${job.type} ${job.tags.join(" ")}`
+    .toLowerCase()
+    .includes(search.toLowerCase());
 
-    const matchesLocation = job.location
-      .toLowerCase()
-      .includes(location.toLowerCase());
+    const normalizedLocation = location.trim().toLowerCase();
+    const matchesLocation =
+    !normalizedLocation ||
+    job.location.toLowerCase().includes(normalizedLocation) ||
+    (normalizedLocation === "remote" && `${job.type} ${job.tags.join(" ")}`.toLowerCase().includes("remote"));
 
     const matchesType =
       jobType === "All" || job.type === jobType;
